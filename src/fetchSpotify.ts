@@ -1,3 +1,7 @@
+const spotify_client_id = import.meta.env.SPOTIFY_CLIENT_ID;
+const spotify_client_secret = import.meta.env.SPOTIFY_CLIENT_SECRET;
+
+
 export async function spotifyClient() {
     let token: {
         "access_token": string,
@@ -50,7 +54,7 @@ export async function spotifyClient() {
     }
 }
 async function fetchToken() {
-    const tokenResponse = await fetch("https://accounts.spotify.com/api/token?grant_type=client_credentials&client_id=710dbe31ebd44ce890ee6ed9ede0513e&client_secret=f77065a025da45a387db1736de9fd562", {
+    const tokenResponse = await fetch("https://accounts.spotify.com/api/token?grant_type=client_credentials&client_id="+spotify_client_id+"&client_secret="+spotify_client_secret+"}", {
         method: "POST", 
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
