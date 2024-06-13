@@ -7,13 +7,13 @@ import SpotifyPlayer from 'react-spotify-web-playback';
 const spotify_sdk_token = import.meta.env.VITE_SDK_TOKEN;
 
 
-function Tile({imageUrl}: {imageUrl:string}) {
+function Tile({imageUrl, name}: {imageUrl:string, name: string}) {
 
   return (
     <>
       <div className="tile">
         <img src={imageUrl} ></img>
-        <p>Test</p>
+        <p>{name}</p>
       </div> 
     </>
   )
@@ -97,15 +97,13 @@ function App() {
     </div>
 
     <div className="main">
-      <h1>Spotify</h1> <br /><br />
-      
-      {selectedArtist.name && <p>Selected Artist: {selectedArtist.name}</p>} {/* Change here */}
-      {selectedArtist.id && <p>Selected Artist ID: {selectedArtist.id}</p>} {/* New field */}
+      <a className='main-title' href=''><h1>Spotify</h1></a> <br />
 
       <AutoComplete spotifyApi={spotifyApi} onSelectArtist={handleSelectArtist} />
-
-      <div className="grid grid-cols-3 gap-4">
-        {tiles?.map((data, index) => <div onClick={() => setAlbumId(data.id)}> <Tile key={index} imageUrl={data.images[0].url} onClick=""></Tile></div>)} 
+      <br /><br />
+      <div className="grid grid-cols-3 gap-4"> 
+        {tiles?.map((data, index) => <div onClick={() => setAlbumId(data.id)}> 
+        <Tile key={index} imageUrl={data.images[0].url} name={data.name} onClick=""></Tile></div>)} 
       </div>
     </div>
 

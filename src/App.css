@@ -8,16 +8,15 @@
 .sidebar {
   height: 100%;
   width: 10%;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   padding-top: 40px;
   background-color: #161616;
-  border-radius: 25px;
 }
 
 .main {
-  height: 90%;
+  min-height: 87%;
   width: 90%;
   position: absolute;
   left: 10%;
@@ -25,18 +24,15 @@
   padding-top: 40px;
   background: #161616;
   background: linear-gradient(0deg, #161616 50%, #101321 70%, #08184f 100%);
-  border-radius: 25px;
 }
 
 .playbar {
   height: 10%;
   width: 90%;
-  position: absolute;
+  position: fixed;
   left: 10%;
-  top: 90%;
-  padding-top: 40px;
+  bottom: 0%;
   background: #161616;
-  background: linear-gradient(0deg, #161616 50%, #101321 70%, #08184f 100%);
 }
 
 .tile {
@@ -47,4 +43,19 @@
   border-radius: 25px;
   background-color: aliceblue;
   color: black;
+}
+
+.main-title {
+  color: white;
+  font-weight: bold;
+}
+
+.main-title:hover {
+  color: white;
+  font-weight: bold;
+}
+
+.main-title:active {
+  color: white;
+  font-weight: bold;
 }
