@@ -27,7 +27,7 @@ export async function spotifyClient() {
     }
 
     async function getAlbumsByArtist(artistId: string) {
-        const url = `https://api.spotify.com/v1/artists/${artistId}/albums?offset=0&limit=50&market=NO&include_groups=single`
+        const url = `https://api.spotify.com/v1/artists/${artistId}/albums?offset=0&limit=50&market=NO&include_groups=single,album`
         const albumsResponse = await fetch(url, {
             method:"GET",
             headers: {
@@ -50,9 +50,23 @@ export async function spotifyClient() {
         return await artistsResponse.json()
     }
 
+    async function getTracks(albumId: string) {
+        const url = `https://api.spotify.com/v1/albums/${albumId}/tracks`
+        const albumIdResponse = await fetch(url, {
+            method:"GET",
+            headers: {
+                Authorization: `Bearer ${token.access_token}`
+            }
+        })
+
+        return await albumIdResponse.json()
+    }
+
     return {
         getAlbumsByArtist,
         getArtists,
+        getTracks,
+        token
     }
 }
 async function fetchToken() {

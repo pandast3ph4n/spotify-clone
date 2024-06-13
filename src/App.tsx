@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import { spotifyClient } from './fetchSpotify'
 import debounce from 'lodash.debounce'
+import SpotifyPlayer from 'react-spotify-web-playback';
 
+const spotify_sdk_token = import.meta.env.VITE_SDK_TOKEN;
 
 
 function Tile({imageUrl}: {imageUrl:string}) {
-  
+
   return (
     <>
       <div className="tile">
@@ -17,53 +19,70 @@ function Tile({imageUrl}: {imageUrl:string}) {
   )
 }
 
-function AutoComplete({ artists, onSelectArtist }) {
-  const handleSelect = (e) => {
-    const selectedArtist = artists.find(artist => artist.name === e.target.value);
+function AutoComplete({ spotifyApi, onSelectArtist }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [artists, setArtists] = useState([])
+  const ref = useRef(null)
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  useEffect(() => {
+    spotifyApi?.getArtists(searchTerm).then(({artists: {items = []}}) => {
+      setArtists(items)
+    })
+  }, [searchTerm])
+  
+  useEffect(() => {
+    const selectedArtist = artists.find(artist => artist.name === searchTerm);
     if (selectedArtist) {
       onSelectArtist(selectedArtist.name, selectedArtist.id);
     }
-  };
-
-  return (
-    <>
-      <datalist id="names-list">
-        {artists?.map((artist) => (
-          <option key={artist.id} value={artist.name}></option>
-        ))}
-      </datalist>
-      <input type="text" onChange={handleSelect} list="names-list" />
-    </>
-  );
-}
-
-
-function App() {
-  const [tiles, setTiles] = useState([])
-  const [searchTerm, setSearchTerm] = useState("");
-  const [spotifyApi, setSpotifyApi] = useState<Awaited<ReturnType<typeof spotifyClient>>>()
-  const [artists, setArtists] = useState(null)
-  const [selectedArtist, setSelectedArtist] = useState({ name: "", id: "" });
-
-
-  useMemo( async () => {
-    const client = await spotifyClient()
-    const {items} = await client.getAlbumsByArtist(selectedArtist.id)
-    setSpotifyApi(client)
-    setTiles(items)
-  }, [])
-
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+  }, [artists])
 
   const debouncedResults = useMemo(() => {
     return debounce(handleChange, 300);
   }, []);
 
+  
+
+  return (
+    <>
+      <input type="text" name='list' list="names-list" onChange={debouncedResults}/> 
+      <datalist ref={ref} id="names-list">
+        {artists?.map((artist) => (
+          <option key={artist.id} value={artist.name}></option>
+        ))}
+      </datalist>
+ 
+    </>
+  );
+}
+ 
+
+function App() {
+  const [tiles, setTiles] = useState([]);
+  const [spotifyApi, setSpotifyApi] = useState<Awaited<ReturnType<typeof spotifyClient>>>()
+  const [albumId, setAlbumId] = useState( "" );
+  const [selectedArtist, setSelectedArtist] = useState({ name: "", id: "" });
+  const [tracks, setTracks] = useState([]);
+
+
+  useMemo( async () => {
+    const client = await spotifyClient();
+    setSpotifyApi(client);
+  }, [])
+
+  useEffect(() => {
+    spotifyApi?.getAlbumsByArtist(selectedArtist.id).then(({items}) => setTiles(items))
+
+  }, [selectedArtist])
+
   useEffect (() => {
-    spotifyApi?.getArtists(searchTerm).then(setArtists)
-  },[searchTerm]);
+    spotifyApi?.getTracks(albumId).then(tracks => setTracks(tracks.items))
+  
+  }, [albumId])
 
   const handleSelectArtist = (name, id) => {
     setSelectedArtist({ name, id });
@@ -78,26 +97,26 @@ function App() {
     </div>
 
     <div className="main">
-      <h1>Spotify</h1>
-
-      <input type="text" onChange={debouncedResults} list="names-list"/>  
-  
-
-      <br></br><br></br>
-
+      <h1>Spotify</h1> <br /><br />
+      
       {selectedArtist.name && <p>Selected Artist: {selectedArtist.name}</p>} {/* Change here */}
       {selectedArtist.id && <p>Selected Artist ID: {selectedArtist.id}</p>} {/* New field */}
 
-      <AutoComplete artists={artists?.artists?.items ?? []} onSelectArtist={handleSelectArtist} />
-
-
+      <AutoComplete spotifyApi={spotifyApi} onSelectArtist={handleSelectArtist} />
 
       <div className="grid grid-cols-3 gap-4">
-        {tiles?.map((data, index) => <Tile key={index} imageUrl={data.images[0].url}></Tile>)}
+        {tiles?.map((data, index) => <div onClick={() => setAlbumId(data.id)}> <Tile key={index} imageUrl={data.images[0].url} onClick=""></Tile></div>)} 
       </div>
     </div>
+
     
     <div className='playbar'>
+    <SpotifyPlayer
+  token={spotify_sdk_token}
+  uris={tracks?.map(item => item.uri)}
+  play={true}
+/>
+      
     </div>
     </>
   )

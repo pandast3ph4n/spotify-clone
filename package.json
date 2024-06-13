@@ -12,8 +12,10 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "lodash.debounce": "^4.0.8",
+    "primereact": "^10.6.6",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-spotify-web-playback": "^0.14.4"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.9",
