@@ -163,7 +163,7 @@ function App() {
 
     <div className="top-90 start-0 bottom-0 z-[70] bg-white fixed text-gray-700 min-w-[1000px]">
     <SpotifyPlayer
-  token={spotify_sdk_token}
+  token={spotifyApi?.token}
   uris={tracks?.map(item => item.uri)}
   play={true}
 />
