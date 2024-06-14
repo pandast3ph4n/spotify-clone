@@ -21,7 +21,7 @@ Install Spotify Clone with npm
 Open your terminal and then type
 
 ```bash
-git clone {the url to the GitHub repo}
+git clone https://github.com/pandast3ph4n/spotify-clone.git
 ```
 
 This clones the repo
