@@ -9,7 +9,7 @@ This app is a new front for Spotify were you search by artist and you get a list
 
 ![App Screenshot](https://github.com/pandast3ph4n/spotify-clone/assets/47857602/6174db43-5816-4d40-9f9d-8893a399a734)
 
-[App Screenshot](https://github.com/pandast3ph4n/spotify-clone/assets/47857602/2bccb8b2-6e56-4979-ac59-85f476ef5f26)
+![App Screenshot](https://github.com/pandast3ph4n/spotify-clone/assets/47857602/2bccb8b2-6e56-4979-ac59-85f476ef5f26)
 
 
 
@@ -57,7 +57,7 @@ After you have made an app and cloned the repo, you will need to create your own
 ```dotenv
 VITE_SPOTIFY_CLIENT_ID='client id'
 VITE_SPOTIFY_CLIENT_SECRET='client secret'
-VITE_SDK_TOKEN="sdk token]"
+VITE_SDK_TOKEN="sdk token"
 ```
 
 After you have put in your own data, the app should be working.

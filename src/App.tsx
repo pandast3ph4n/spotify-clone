@@ -6,7 +6,6 @@ import SpotifyPlayer from 'react-spotify-web-playback';
 
 const spotify_sdk_token = import.meta.env.VITE_SDK_TOKEN;
 
-
 function Tile({imageUrl, name}: {imageUrl:string, name: string}) {
 
   return (
